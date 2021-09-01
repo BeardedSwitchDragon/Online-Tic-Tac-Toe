@@ -13,6 +13,7 @@ const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-b
 const playSquare = (squareID, player) => {
     if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O") {
         document.getElementById(squareID).textContent = player;
+        socket.emit("playerMove", squareID);
         
         return true;
     } else {
@@ -89,13 +90,16 @@ ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
         if (playSquare(square.id, "X")) {
             checkWin("X");
-            fabricatePlayerTwoInput();
-            checkWin("O");
+            //fabricatePlayerTwoInput();
+            //checkWin("O");
         };
     });
 });
 
 
 // Client-side socket stuff
-
+socket.on("playerMove", (squareID) => {
+    receivePlayerTwoInput(squareID);
+    checkWin("O");
+});
 

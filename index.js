@@ -19,6 +19,9 @@ app.use(express.static("public"));
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    socket.on("playerMove", (squareID) => {
+        socket.broadcast.emit("playerMove", (squareID));
+    });
 });
 
 server.listen(port, () => {
