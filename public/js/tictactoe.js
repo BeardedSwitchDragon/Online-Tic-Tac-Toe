@@ -12,13 +12,22 @@ const ticTacToeSquares = document.getElementsByClassName("tictactoe-button");
 const playSquare = (squareID, player) => {
     document.getElementById(squareID).textContent = player;
 };
+//Check win
 const checkWin = (player) => {
     
     for (let columnRow = 1; columnRow <= 3; columnRow++) {
-        //Check horizontal win
+        
+        //squaresInColumn is used to determine a horizontal victory
+        //squaresInRow is used to determine a vertical victory
         const squaresInColumn = document.getElementsByClassName(`col-${columnRow}`);
         const squaresInRow = document.getElementsByClassName(`row-${columnRow}`);
 
+        /*
+        - convert document.getElementsByClassName into an Array by using Array.from
+        - determine if all values in an array satisfy a codition using .every()
+        - using the || operator, the variable will always be which one is true.
+
+        */
         const winTest = Array.from(squaresInColumn).every((square) => {
             return square.textContent === player;
         }) || Array.from(squaresInRow).every((square) => {
