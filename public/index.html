@@ -4,27 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/tictactoe.css">
-    <title>Document</title>
+    <title>join a tictactoe room</title>
 </head>
 <body>
-    <h1>Tictactoe</h1>
-
-    <div class="tictactoe-container">
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-1 row-1" id="0">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-1 row-2" id="1">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-1 row-3" id="2">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-2 row-1" id="3">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-2 row-2" id="4">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-2 row-3" id="5">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-3 row-1" id="6">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-3 row-2" id="7">-</button></div>
-        <div class="tictactoe-square-container"><button class="tictactoe-button col-3 row-3" id="8">-</button></div>
-      </div>
-      
-      <script src="/socket.io/socket.io.js"></script>
-      <script src="/js/tictactoe.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script> -->
-
+    <form action="/tictac.html">
+        <label>Alias</label>
+        <input type="text" name="username" required>
+        <label>Room</label>
+        <input type="text" name="room" required>
+        <button>Join!!!!</button>
+    </form>
+    
 </body>
 </html>
