@@ -13,10 +13,15 @@ const playSquare = (squareID, player) => {
     document.getElementById(squareID).textContent = player;
 };
 const checkWin = (player) => {
-    //Check horizontal win
-    for (let column = 1; column <= 3; column++) {
-        const squaresInRow = document.getElementsByClassName(`col-${column}`);
-        const winTest = Array.from(squaresInRow).every((square) => {
+    
+    for (let columnRow = 1; columnRow <= 3; columnRow++) {
+        //Check horizontal win
+        const squaresInColumn = document.getElementsByClassName(`col-${columnRow}`);
+        const squaresInRow = document.getElementsByClassName(`row-${columnRow}`);
+
+        const winTest = Array.from(squaresInColumn).every((square) => {
+            return square.textContent === player;
+        }) || Array.from(squaresInRow).every((square) => {
             return square.textContent === player;
         });
 
@@ -24,8 +29,19 @@ const checkWin = (player) => {
             console.log(`${player} wins!`);
         } else {
             console.log("nobody won yet");
-        }
-    }
+        };
+        //Check vertical win
+        
+
+
+    };
+
+    // for (let row = 1; row <= 3; row++) {
+    //     const squaresInRow = document.getElementsByClassName(`row-${row}`);
+    //     const winTest = Array.from(squares)
+        
+    // }
+
 
 };
 const updateGrid = () => {
