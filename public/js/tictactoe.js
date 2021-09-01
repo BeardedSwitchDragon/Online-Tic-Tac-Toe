@@ -61,6 +61,17 @@ const checkWin = (player) => {
 
 
 };
+const fabricatePlayerTwoInput = () => {
+    let randomSquare = Math.floor(Math.random() * 9);
+
+    while (ticTacToeSquares[randomSquare].textContent === "X"|| ticTacToeSquares[randomSquare].textContent === "O") {
+        randomSquare = Math.floor(Math.random() * 9);
+    }
+    receivePlayerTwoInput(randomSquare);
+};
+const receivePlayerTwoInput = (squareID) => {
+    playSquare(squareID, "O");
+};
 const updateGrid = () => {
 
 };
@@ -70,6 +81,8 @@ ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
         playSquare(square.id, "X");
         checkWin("X");
+        fabricatePlayerTwoInput();
+        checkWin("O");
     });
 });
 
