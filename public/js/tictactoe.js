@@ -4,7 +4,7 @@
 
 //Get all tictactoe squares
 
-const ticTacToeSquares = document.getElementsByClassName("tictactoe-button");
+const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
 
 //Game Logic
 
@@ -35,11 +35,19 @@ const checkWin = (player) => {
         });
 
         if (winTest) {
-            console.log(`${player} wins!`);
-        } else {
-            console.log("nobody won yet");
+            return console.log(`${player} wins!`);
         };
-        //Check vertical win
+        //check if diagonal win (left to right)
+        if (ticTacToeSquares[0].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[8].textContent === player) {
+            return console.log(`${player} wins!`);
+
+        //Check if diagonal win (right to left)
+        } else if ( ticTacToeSquares[2].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[6].textContent === player) {
+            return console.log(`${player} wins!`);
+        }
+
+        console.log("nobody won yet");
+        
         
 
 
@@ -58,7 +66,7 @@ const updateGrid = () => {
 };
 
 //Iterates through the all the tictactoe grids (more specfically buttons). It then listens for clicks, and replaces the button text with X (placeholder).
-Array.from(ticTacToeSquares).forEach((square) => {
+ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
         playSquare(square.id, "X");
         checkWin("X");
