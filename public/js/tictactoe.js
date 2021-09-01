@@ -10,7 +10,14 @@ const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-b
 
 //Places an X or O when called. squareID is the element ID of the button, and player is either "X" or "O"
 const playSquare = (squareID, player) => {
-    document.getElementById(squareID).textContent = player;
+    if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O") {
+        document.getElementById(squareID).textContent = player;
+        
+        return true;
+    } else {
+        return false;
+    }
+   
 };
 //Check win
 const checkWin = (player) => {
@@ -64,7 +71,7 @@ const checkWin = (player) => {
 const fabricatePlayerTwoInput = () => {
     let randomSquare = Math.floor(Math.random() * 9);
 
-    while (ticTacToeSquares[randomSquare].textContent === "X"|| ticTacToeSquares[randomSquare].textContent === "O") {
+    while (ticTacToeSquares[randomSquare].textContent === "X" && ticTacToeSquares[randomSquare].textContent === "O") {
         randomSquare = Math.floor(Math.random() * 9);
     }
     receivePlayerTwoInput(randomSquare);
@@ -79,10 +86,11 @@ const updateGrid = () => {
 //Iterates through the all the tictactoe grids (more specfically buttons). It then listens for clicks, and replaces the button text with X (placeholder).
 ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
-        playSquare(square.id, "X");
-        checkWin("X");
-        fabricatePlayerTwoInput();
-        checkWin("O");
+        if (playSquare(square.id, "X")) {
+            checkWin("X");
+            fabricatePlayerTwoInput();
+            checkWin("O");
+        };
     });
 });
 
