@@ -1,6 +1,7 @@
 
 //Fetch document elements
 
+
 //Get all tictactoe squares
 
 const ticTacToeSquares = document.getElementsByClassName("tictactoe-button");
@@ -11,7 +12,20 @@ const ticTacToeSquares = document.getElementsByClassName("tictactoe-button");
 const playSquare = (squareID, player) => {
     document.getElementById(squareID).textContent = player;
 };
-const checkWin = () => {
+const checkWin = (player) => {
+    //Check horizontal win
+    for (let column = 1; column <= 3; column++) {
+        const squaresInRow = document.getElementsByClassName(`col-${column}`);
+        const winTest = Array.from(squaresInRow).every((square) => {
+            return square.textContent === player;
+        });
+
+        if (winTest) {
+            console.log(`${player} wins!`);
+        } else {
+            console.log("nobody won yet");
+        }
+    }
 
 };
 const updateGrid = () => {
@@ -22,6 +36,7 @@ const updateGrid = () => {
 Array.from(ticTacToeSquares).forEach((square) => {
     square.addEventListener("click", () => {
         playSquare(square.id, "X");
+        checkWin("X");
     });
 });
 
