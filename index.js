@@ -1,15 +1,26 @@
+const http = require("http");
 const express = require("express");
 const path = require('path');
+const { Server } = require("socket.io");
+
 
 const app = express();
 const port = 3000;
+const server = http.createServer(app);
+
+const io = new Server(server);
+
 console.log(path.join(__dirname, 'static'));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-    console.log("sds");
-})
+// app.get("/", (req, res) => {
+//     res.sendFile(__dirname + '/public/index.html');
+// })
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+
+server.listen(port, () => {
     console.log("Server running on port: " + port);
 })

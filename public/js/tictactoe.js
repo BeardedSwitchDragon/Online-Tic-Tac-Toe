@@ -3,6 +3,7 @@
 
 
 //Get all tictactoe squares
+var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
 
