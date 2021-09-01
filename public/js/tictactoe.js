@@ -6,17 +6,19 @@
 var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
+var playerCanMove = true;
 
 //Game Logic
 
 //Places an X or O when called. squareID is the element ID of the button, and player is either "X" or "O"
 const playSquare = (squareID, player) => {
-    if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O") {
+    if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && playerCanMove === true) {
         document.getElementById(squareID).textContent = player;
         socket.emit("playerMove", squareID);
-        
+        playerCanMove = false;
         return true;
     } else {
+        alert("Invalid move! It's either not your turn or somebody has already moved there!");
         return false;
     }
    
@@ -80,6 +82,7 @@ const fabricatePlayerTwoInput = () => {
 };
 const receivePlayerTwoInput = (squareID) => {
     playSquare(squareID, "O");
+    playerCanMove = true;
 };
 const updateGrid = () => {
 
