@@ -13,14 +13,57 @@ const io = new Server(server);
 console.log(path.join(__dirname, 'static'));
 app.use(express.static("public"));
 
+const rooms = require("./utils/rooms.js");
+
+
 // app.get("/", (req, res) => {
 //     res.sendFile(__dirname + '/public/index.html');
 // })
 
+
 io.on('connection', (socket) => {
     console.log('a user connected');
-    socket.on("playerMove", (squareID) => {
-        socket.broadcast.emit("playerMove", (squareID));
+    let currentRoom = {};
+    
+    socket.on("join", ({username, reqRoom}, callback) => {
+        // const currentRoomIndex = rooms.findIndex((room) => room.name === reqRoom);
+        // console.log(currentRoomIndex);
+        // console.log(rooms[currentRoomIndex]);
+        const currentRoom = rooms.findRoom(reqRoom);
+        if (currentRoom) {
+            // if (rooms.includes(reqRoom) && room.usernames.length < 2) {
+            //     return room.usernames.push(username);
+            // } else if (room.usernames.length === 2) {
+            //     return callback("Room is full");
+            // };
+            if (currentRoom.users.length < 2) {
+                const user = {
+                    username,
+                    id: socket.id
+                };
+
+                return rooms.addUserToRoom(user);
+            } else {
+                return callback("Room is full");
+            }
+        };
+        callback();
+        // rooms.push({name: reqRoom, users: [{username, id: socket.id}]});
+        rooms.addRoom({name: reqRoom, users: [{username, id: socket.id}]});
+       // const test = rooms.findIndex((room) => room.name === reqRoom);
+        socket.join(reqRoom);
+   
+    });
+
+    socket.on("playerMove", ({room, squareID}) => {
+        console.log("hello");
+        socket.broadcast.to(room).emit("playerMove", (squareID));
+    });
+
+    socket.on("disconnect", () => {
+        rooms.removeUserFromRoom(socket.id);
+        console.log("user disconnected");
+        
     });
 });
 

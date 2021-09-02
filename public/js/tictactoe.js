@@ -6,15 +6,19 @@
 var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
-var playerCanMove = true;
+var playerCanMove = false;
+
+//Get username and room value
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
 //Game Logic
 
 //Places an X or O when called. squareID is the element ID of the button, and player is either "X" or "O"
 const playSquare = (squareID, player) => {
+    console.log("i am called");
     if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && playerCanMove === true) {
         document.getElementById(squareID).textContent = player;
-        socket.emit("playerMove", squareID);
+        socket.emit("playerMove", {squareID, room});
         playerCanMove = false;
         return true;
     } else {
@@ -81,8 +85,9 @@ const fabricatePlayerTwoInput = () => {
     receivePlayerTwoInput(randomSquare);
 };
 const receivePlayerTwoInput = (squareID) => {
+    console.log("IAAM CALLED TOO!!!")
     playSquare(squareID, "O");
-    playerCanMove = true;
+    
 };
 const updateGrid = () => {
 
@@ -101,8 +106,18 @@ ticTacToeSquares.forEach((square) => {
 
 
 // Client-side socket stuff
+socket.emit("join", {username, reqRoom: room}, (error) => {
+    if (error) {
+        alert(error);
+        location.href = "/";
+    } else {
+        playerCanMove = true;
+    }
+});
 socket.on("playerMove", (squareID) => {
+    console.log("hheeeeeeheee");
     receivePlayerTwoInput(squareID);
     checkWin("O");
+    playerCanMove = true;
 });
 
