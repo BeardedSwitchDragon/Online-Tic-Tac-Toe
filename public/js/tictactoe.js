@@ -7,6 +7,7 @@ var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
 var playerCanMove = true;
+var gameOver = false;
 
 //Get username and room value
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
@@ -15,6 +16,9 @@ const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true }
 
 //Places an X or O when called. squareID is the element ID of the button, and player is either "X" or "O"
 const playSquare = (squareID, player) => {
+    if (gameOver) {
+        playerCanMove = false;
+    }
     console.log("i am called");
     if ((ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && playerCanMove === true) ||
      (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && player === "O")) {
@@ -44,29 +48,37 @@ const checkWin = (player) => {
 
         */
         const winTest = Array.from(squaresInColumn).every((square) => {
+            console.log(square.textContent);
             return square.textContent === player;
         }) || Array.from(squaresInRow).every((square) => {
+            console.log(square.textContent);
             return square.textContent === player;
         });
+        console.log(winTest);
 
         if (winTest) {
-            return console.log(`${player} wins!`);
+            console.log(`${player} wins!`);
+            return true;
         };
-        //check if diagonal win (left to right)
-        if (ticTacToeSquares[0].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[8].textContent === player) {
-            return console.log(`${player} wins!`);
-
-        //Check if diagonal win (right to left)
-        } else if ( ticTacToeSquares[2].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[6].textContent === player) {
-            return console.log(`${player} wins!`);
-        }
-
-        console.log("nobody won yet");
         
         
 
 
     };
+    //check if diagonal win (left to right)
+    if (ticTacToeSquares[0].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[8].textContent === player) {
+        console.log(`${player} wins!`);
+        return true;
+
+    //Check if diagonal win (right to left)
+    } else if ( ticTacToeSquares[2].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[6].textContent === player) {
+        console.log(`${player} wins!`);
+        return true;
+    }
+
+    console.log("nobody won yet");
+    return false;
+    
 
     // for (let row = 1; row <= 3; row++) {
     //     const squaresInRow = document.getElementsByClassName(`row-${row}`);
@@ -104,9 +116,13 @@ ticTacToeSquares.forEach((square) => {
             console.log("placing square logic");
             socket.emit("playerMove", {squareID: square.id, room});
             playerCanMove = false;
-            checkWin("X");
-            //fabricatePlayerTwoInput();
-            checkWin("O");
+            const win = checkWin("X");
+            
+            if (win) {
+                console.log("called");
+                alert("You win!");
+                socket.emit("win", {username, room});
+            };
         };
     });
 });
@@ -129,5 +145,9 @@ socket.on("playerMove", (squareID) => {
     playerCanMove = true;
     
     
+});
+socket.on("win", (username) => {
+    playerCanMove = false;
+    alert(`${username} Wins!!!`);
 });
 

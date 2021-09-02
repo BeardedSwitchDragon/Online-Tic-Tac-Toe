@@ -60,6 +60,10 @@ io.on('connection', (socket) => {
         socket.broadcast.to(room).emit("playerMove", (squareID));
     });
 
+    socket.on("win", ({username, room}) => {
+        socket.broadcast.to(room).emit("win", username);
+    });
+
     socket.on("disconnect", () => {
         rooms.removeUserFromRoom(socket.id);
         console.log("user disconnected");
