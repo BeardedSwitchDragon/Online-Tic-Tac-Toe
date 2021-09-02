@@ -6,6 +6,7 @@
 var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
+const opponentHeader = document.querySelector("#opponentHeader");
 var playerCanMove = true;
 var gameOver = false;
 

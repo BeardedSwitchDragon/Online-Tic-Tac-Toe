@@ -5,13 +5,18 @@ h1 {
 .tictactoe-container {
     display: grid;
     grid-template-columns: auto auto auto;
-    background-color: #2196F3;
+    background-color: #5654F0;
     padding: 10px;
   }
 .tictactoe-square-container {
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: #6E6BF0;
+    border: 3px solid #60F099;
     padding: 20px;
     font-size: 30px;
     text-align: center;
+}
+.tictactoe-button {
+  width:100%;
+  background-color: #F08A84;
+  color:black;
 }
