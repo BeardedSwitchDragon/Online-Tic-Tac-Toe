@@ -16,16 +16,15 @@ const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true }
 //Places an X or O when called. squareID is the element ID of the button, and player is either "X" or "O"
 const playSquare = (squareID, player) => {
     console.log("i am called");
-    if (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && playerCanMove === true) {
+    if ((ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && playerCanMove === true) ||
+     (ticTacToeSquares[squareID].textContent !== "X" && ticTacToeSquares[squareID].textContent !== "O" && player === "O")) {
         document.getElementById(squareID).textContent = player;
-        socket.emit("playerMove", {squareID, room});
-        playerCanMove = false;
-   
-        return true;
     } else {
         alert("Invalid move! It's either not your turn or somebody has already moved there!");
         return false;
     }
+    playerCanMove = false;
+    return true;
    
 };
 //Check win
@@ -88,7 +87,8 @@ const fabricatePlayerTwoInput = () => {
 const receivePlayerTwoInput = (squareID) => {
     console.log("IAAM CALLED TOO!!!")
     playSquare(squareID, "O");
-    playerCanMove = true;
+    //playerCanMove = true;
+    
 
     
 };
@@ -100,6 +100,10 @@ const updateGrid = () => {
 ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
         if (playSquare(square.id, "X")) {
+            //playerCanMove = false;
+            console.log("placing square logic");
+            socket.emit("playerMove", {squareID: square.id, room});
+            playerCanMove = false;
             checkWin("X");
             //fabricatePlayerTwoInput();
             checkWin("O");
@@ -119,9 +123,10 @@ socket.emit("join", {username, reqRoom: room}, (error) => {
     }
 });
 socket.on("playerMove", (squareID) => {
-    
+    console.log("helllo");
     receivePlayerTwoInput(squareID);
     checkWin("O");
+    playerCanMove = true;
     
     
 });

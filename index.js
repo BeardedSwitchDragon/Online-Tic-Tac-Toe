@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("playerMove", ({room, squareID}) => {
-        console.log("hello");
+        console.log("hello" + squareID);
         socket.broadcast.to(room).emit("playerMove", (squareID));
     });
 
