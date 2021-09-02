@@ -23,7 +23,6 @@ const rooms = require("./utils/rooms.js");
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    let currentRoom = {};
     
     socket.on("join", ({username, reqRoom}, callback) => {
         // const currentRoomIndex = rooms.findIndex((room) => room.name === reqRoom);
@@ -37,12 +36,13 @@ io.on('connection', (socket) => {
             //     return callback("Room is full");
             // };
             if (currentRoom.users.length < 2) {
+                console.log(currentRoom.users.length);
                 const user = {
                     username,
                     id: socket.id
                 };
 
-                return rooms.addUserToRoom(user);
+                return rooms.addUserToRoom(user, currentRoom);
             } else {
                 return callback("Room is full");
             }

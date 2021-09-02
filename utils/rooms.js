@@ -4,8 +4,16 @@ const addRoom = (room) => {
     rooms.push(room);
 };
 
-const addUserToRoom = (user, room) => {
-    rooms[rooms.indexOf((name) => room === name)].users.push(user);
+const addUserToRoom = (user, reqRoom) => {
+    console.log(rooms);
+    console.log(reqRoom);
+    const index = rooms.findIndex((room) => {
+        console.log(room);
+        console.log(room.name);
+        return reqRoom.name === room.name;
+    });
+    console.log(`index,x.d~~!!!! ${index}`);
+    rooms[index].users.push(user);
 };
 
 const findRoom = (roomName) => {
