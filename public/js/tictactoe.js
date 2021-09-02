@@ -6,7 +6,7 @@
 var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
-var playerCanMove = false;
+var playerCanMove = true;
 
 //Get username and room value
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
@@ -20,6 +20,7 @@ const playSquare = (squareID, player) => {
         document.getElementById(squareID).textContent = player;
         socket.emit("playerMove", {squareID, room});
         playerCanMove = false;
+   
         return true;
     } else {
         alert("Invalid move! It's either not your turn or somebody has already moved there!");
@@ -87,6 +88,8 @@ const fabricatePlayerTwoInput = () => {
 const receivePlayerTwoInput = (squareID) => {
     console.log("IAAM CALLED TOO!!!")
     playSquare(squareID, "O");
+    playerCanMove = true;
+
     
 };
 const updateGrid = () => {
@@ -99,7 +102,7 @@ ticTacToeSquares.forEach((square) => {
         if (playSquare(square.id, "X")) {
             checkWin("X");
             //fabricatePlayerTwoInput();
-            //checkWin("O");
+            checkWin("O");
         };
     });
 });
@@ -111,13 +114,15 @@ socket.emit("join", {username, reqRoom: room}, (error) => {
         alert(error);
         location.href = "/";
     } else {
-        playerCanMove = true;
+        
+       
     }
 });
 socket.on("playerMove", (squareID) => {
-    console.log("hheeeeeeheee");
+    
     receivePlayerTwoInput(squareID);
     checkWin("O");
-    playerCanMove = true;
+    
+    
 });
 
