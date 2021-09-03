@@ -35,8 +35,13 @@ io.on('connection', (socket) => {
             // } else if (room.usernames.length === 2) {
             //     return callback("Room is full");
             // };
-            
+            currentRoom.users.forEach((user) => {
+                if (user.username.toLowerCase() === username.toLowerCase()) {
+                    return callback("Username taken.");
+                };
+            });
             if (currentRoom.users.length < 2) {
+                
                 console.log(currentRoom.users.length);
                 const user = {
                     username,
@@ -84,6 +89,9 @@ io.on('connection', (socket) => {
     socket.on("disconnect", () => {
         rooms.removeUserFromRoom(socket.id);
         console.log("user disconnected");
+        socket.broadcast.emit("userDisconnect");
+        
+        
         
     });
 });

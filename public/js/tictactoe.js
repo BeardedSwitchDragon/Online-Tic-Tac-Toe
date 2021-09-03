@@ -161,6 +161,10 @@ socket.on("opponentUsername2", (opponentUsername) => {
 });
 socket.on("error", (err) => {
     console.log(err);
+});
+socket.on("userDisconnect", () => {
+    alert(`${opponentHeader.innerHTML} disconnected. Returning to homepage`);
+    location.href = "/";
 })
 
 //Receive opponent move

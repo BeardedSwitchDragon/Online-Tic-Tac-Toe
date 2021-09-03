@@ -14,6 +14,7 @@ const addUserToRoom = (user, reqRoom) => {
     });
     console.log(`index,x.d~~!!!! ${index}`);
     rooms[index].users.push(user);
+    console.log(rooms);
 };
 
 const findRoom = (roomName) => {
@@ -21,6 +22,7 @@ const findRoom = (roomName) => {
 }
 
 const removeUserFromRoom = (id) => {
+
     rooms.forEach((room) => {
         for (const [key, value] of Object.entries(room)) {
             if (key === "users") {
@@ -30,10 +32,15 @@ const removeUserFromRoom = (id) => {
         };
     });
 };
+const removeRoom = (roomName) => {
+    const roomToBeDeleted = rooms.find((room) => room.name === roomName);
+    rooms.splice(rooms.indexOf(roomToBeDeleted), 1);
+}
 
 module.exports = {
     addRoom,
     addUserToRoom,
     removeUserFromRoom,
-    findRoom
+    findRoom,
+    removeRoom
 };
