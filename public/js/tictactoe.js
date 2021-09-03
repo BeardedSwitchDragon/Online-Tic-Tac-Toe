@@ -32,7 +32,7 @@ const playSquare = (squareID, player) => {
    
 };
 //Check win
-const checkWin = (player) => {
+const checkWin = () => {
     
     for (let columnRow = 1; columnRow <= 3; columnRow++) {
         
@@ -47,37 +47,72 @@ const checkWin = (player) => {
         - using the || operator, the variable will always be which one is true.
 
         */
-        const winTest = Array.from(squaresInColumn).every((square) => {
+        const winTestX = Array.from(squaresInColumn).every((square) => {
             console.log(square.textContent);
-            return square.textContent === player;
+            return square.textContent === "X";
         }) || Array.from(squaresInRow).every((square) => {
             console.log(square.textContent);
-            return square.textContent === player;
+            return square.textContent === "X";
         });
-        console.log(winTest);
+        const winTestO = Array.from(squaresInColumn).every((square) => {
+            console.log(square.textContent);
+            return square.textContent === "O";
+        }) || Array.from(squaresInRow).every((square) => {
+            console.log(square.textContent);
+            return square.textContent === "O";
+        });
 
-        if (winTest) {
-            console.log(`${player} wins!`);
-            return true;
-        };
+        if (winTestX) {
+            gameOver = true;
+            alert("You win! redirecting to home page in 5 seconds.");
+            setTimeout(() => {
+                location.href = "/";
+            }, 5000);
+            
+        } else if (winTestO) {
+            gameOver = true;
+            alert("You lose! redirecting to home page in 5 seconds.");
+            setTimeout(() => {
+                location.href = "/";
+            }, 5000);
+
+        }
         
         
 
 
     };
     //check if diagonal win (left to right)
-    if (ticTacToeSquares[0].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[8].textContent === player) {
-        console.log(`${player} wins!`);
-        return true;
+    if (ticTacToeSquares[0].textContent === "X" && ticTacToeSquares[4].textContent === "X" && ticTacToeSquares[8].textContent === "X") {
+        gameOver = true; 
+        alert("You win! redirecting to home page in 5 seconds.");
+        setTimeout(() => {
+            location.href = "/";
+        }, 5000);
 
     //Check if diagonal win (right to left)
-    } else if ( ticTacToeSquares[2].textContent === player && ticTacToeSquares[4].textContent === player && ticTacToeSquares[6].textContent === player) {
-        console.log(`${player} wins!`);
-        return true;
-    }
+    } else if ( ticTacToeSquares[2].textContent === "X" && ticTacToeSquares[4].textContent === "X" && ticTacToeSquares[6].textContent === "X") {
+        gameOver = true;
+        alert("You win! redirecting to home page in 5 seconds.");
+        setTimeout(() => {
+            location.href = "/";
+        }, 5000);
+    } else if (ticTacToeSquares[2].textContent === "O" && ticTacToeSquares[4].textContent === "O" && ticTacToeSquares[6].textContent === "O") {
+        gameOver = true;
+        alert("You lose! redirecting to home page in 5 seconds.");
+        setTimeout(() => {
+            location.href = "/";
+        }, 5000);
+    } else if (ticTacToeSquares[0].textContent === "O" && ticTacToeSquares[4].textContent === "O" && ticTacToeSquares[8].textContent === "O") {
+        gameOver = true;
+        alert("You lose! redirecting to home page in 5 seconds.");
+        setTimeout(() => {
+            location.href = "/";
+        }, 5000);
+    };
 
     console.log("nobody won yet");
-    return false;
+    return null;
     
 
     // for (let row = 1; row <= 3; row++) {
@@ -117,19 +152,22 @@ const checkDraw = () => {
 //Iterates through the all the tictactoe grids (more specfically buttons). It then listens for clicks, and replaces the button text with X (placeholder).
 ticTacToeSquares.forEach((square) => {
     square.addEventListener("click", () => {
-        if (playSquare(square.id, "X")) {
+        const succesfulMove = playSquare(square.id, "X");
+        if (succesfulMove) {
             //playerCanMove = false;
             console.log("placing square logic");
             socket.emit("playerMove", {squareID: square.id, room});
-            playerCanMove = false;
-            const win = checkWin("X");
+            checkWin();
             
-            if (win) {
-                console.log("called");
-                alert("You win! returning to home screen.");
-                socket.emit("win", {username, room});
-                location.href = "/";
-            };
+            playerCanMove = false;
+            
+            
+            // if (win) {
+            //     console.log("called");
+            //     alert("You win! returning to home screen.");
+            //     socket.emit("win", {username, room});
+            //     location.href = "/";
+            // };
             checkDraw();
 
         };
@@ -163,7 +201,7 @@ socket.on("error", (err) => {
     console.log(err);
 });
 socket.on("userDisconnect", () => {
-    alert(`${opponentHeader.innerHTML} disconnected. Returning to homepage`);
+    alert(`opponent disconnected. Returning to homepage`);
     location.href = "/";
 })
 
@@ -171,15 +209,15 @@ socket.on("userDisconnect", () => {
 socket.on("playerMove", (squareID) => {
     console.log("helllo");
     receivePlayerTwoInput(squareID);
-    checkWin("O");
+    checkWin();
     checkDraw();
     playerCanMove = true;
     
     
 });
-socket.on("win", () => {
-    playerCanMove = false;
-    alert(`${opponentHeader.innerHTML} Wins!!! returning to home screen.`);
-    location.href = "/";
-});
+// socket.on("win", () => {
+//     playerCanMove = false;
+//     alert("You lose!!!!");
+//     location.href = "/";
+// });
 

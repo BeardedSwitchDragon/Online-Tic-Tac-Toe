@@ -83,7 +83,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on("win", (room) => {
-        socket.broadcast.to(room).emit("win");
+        console.log("WINNNNN");
+        io.to(room).emit("win");
     });
 
     socket.on("disconnect", () => {
