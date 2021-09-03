@@ -68,6 +68,7 @@ const checkWin = () => {
             setTimeout(() => {
                 location.href = "/";
             }, 5000);
+            return true;
             
         } else if (winTestO) {
             gameOver = true;
@@ -75,6 +76,7 @@ const checkWin = () => {
             setTimeout(() => {
                 location.href = "/";
             }, 5000);
+            return true;
 
         }
         
@@ -89,6 +91,7 @@ const checkWin = () => {
         setTimeout(() => {
             location.href = "/";
         }, 5000);
+        return true;
 
     //Check if diagonal win (right to left)
     } else if ( ticTacToeSquares[2].textContent === "X" && ticTacToeSquares[4].textContent === "X" && ticTacToeSquares[6].textContent === "X") {
@@ -97,22 +100,25 @@ const checkWin = () => {
         setTimeout(() => {
             location.href = "/";
         }, 5000);
+        return true;
     } else if (ticTacToeSquares[2].textContent === "O" && ticTacToeSquares[4].textContent === "O" && ticTacToeSquares[6].textContent === "O") {
         gameOver = true;
         alert("You lose! redirecting to home page in 5 seconds.");
         setTimeout(() => {
             location.href = "/";
         }, 5000);
+        return true;
     } else if (ticTacToeSquares[0].textContent === "O" && ticTacToeSquares[4].textContent === "O" && ticTacToeSquares[8].textContent === "O") {
         gameOver = true;
         alert("You lose! redirecting to home page in 5 seconds.");
         setTimeout(() => {
             location.href = "/";
         }, 5000);
+        return true;
     };
 
     console.log("nobody won yet");
-    return null;
+    return false;
     
 
     // for (let row = 1; row <= 3; row++) {
@@ -157,8 +163,9 @@ ticTacToeSquares.forEach((square) => {
             //playerCanMove = false;
             console.log("placing square logic");
             socket.emit("playerMove", {squareID: square.id, room});
-            checkWin();
-            
+            if (!checkWin()) {
+                checkDraw();
+            }
             playerCanMove = false;
             
             
@@ -168,7 +175,6 @@ ticTacToeSquares.forEach((square) => {
             //     socket.emit("win", {username, room});
             //     location.href = "/";
             // };
-            checkDraw();
 
         };
     });
@@ -209,8 +215,9 @@ socket.on("userDisconnect", () => {
 socket.on("playerMove", (squareID) => {
     console.log("helllo");
     receivePlayerTwoInput(squareID);
-    checkWin();
-    checkDraw();
+    if (!checkWin()) {
+        checkDraw();
+    }
     playerCanMove = true;
     
     
