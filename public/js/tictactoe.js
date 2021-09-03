@@ -6,10 +6,9 @@
 var socket = io();
 
 const ticTacToeSquares = Array.from(document.getElementsByClassName("tictactoe-button"));
-const opponentHeader = document.querySelector("#opponentHeader");
+const opponentHeader = document.querySelector("#opponent-header");
 var playerCanMove = true;
 var gameOver = false;
-
 //Get username and room value
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
@@ -139,15 +138,32 @@ ticTacToeSquares.forEach((square) => {
 
 
 // Client-side socket stuff
+
 socket.emit("join", {username, reqRoom: room}, (error) => {
     if (error) {
         alert(error);
         location.href = "/";
-    } else {
-        
-       
     }
 });
+//Receive opponent username
+socket.on("opponentUsername", (opponentUsername) => {
+    console.log("hi again1!!!!!!1!!!!");
+    opponentHeader.innerHTML = `Versing: ${opponentUsername}`;
+    socket.emit("opponentUsername2", {username, room});
+});
+console.log("HELLO!!!!@!!#@!#$#!@");
+
+
+
+socket.on("opponentUsername2", (opponentUsername) => {
+    console.log("opposne hi p2 (cleitn)");
+    opponentHeader.innerHTML = `Versing: ${opponentUsername}`;
+});
+socket.on("error", (err) => {
+    console.log(err);
+})
+
+//Receive opponent move
 socket.on("playerMove", (squareID) => {
     console.log("helllo");
     receivePlayerTwoInput(squareID);
@@ -157,9 +173,9 @@ socket.on("playerMove", (squareID) => {
     
     
 });
-socket.on("win", (username) => {
+socket.on("win", () => {
     playerCanMove = false;
-    alert(`${username} Wins!!! returning to home screen.`);
+    alert(`${opponentHeader.innerHTML} Wins!!! returning to home screen.`);
     location.href = "/";
 });
 

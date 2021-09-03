@@ -35,21 +35,33 @@ io.on('connection', (socket) => {
             // } else if (room.usernames.length === 2) {
             //     return callback("Room is full");
             // };
+            
             if (currentRoom.users.length < 2) {
                 console.log(currentRoom.users.length);
                 const user = {
                     username,
                     id: socket.id
                 };
+                console.log("hi");
+                console.log(currentRoom.users);
+                console.log(username);
+                rooms.addUserToRoom(user, currentRoom);
+                socket.broadcast.to(reqRoom).emit("opponentUsername", username);
+                // if (currentRoom.users.length === 1) {
+                //     console.log("HEYOOOOOOOOOOO " + currentRoom.users[0].username);
+                //     socket.broadcast.to(reqRoom).emit("opponentUsername", currentRoom.users[0].username);
+                // }
 
-                return rooms.addUserToRoom(user, currentRoom);
+                
             } else {
                 return callback("Room is full");
             }
-        };
+        } else {
+            rooms.addRoom({name: reqRoom, users: [{username, id: socket.id}]});
+        }
         callback();
         // rooms.push({name: reqRoom, users: [{username, id: socket.id}]});
-        rooms.addRoom({name: reqRoom, users: [{username, id: socket.id}]});
+        
        // const test = rooms.findIndex((room) => room.name === reqRoom);
         socket.join(reqRoom);
    
@@ -60,8 +72,13 @@ io.on('connection', (socket) => {
         socket.broadcast.to(room).emit("playerMove", (squareID));
     });
 
-    socket.on("win", ({username, room}) => {
-        socket.broadcast.to(room).emit("win", username);
+    socket.on("opponentUsername2", ({username, room}) => {
+        console.log("opposne hi p2" + username + room);
+        socket.broadcast.to(room).emit("opponentUsername2", username);
+    })
+
+    socket.on("win", (room) => {
+        socket.broadcast.to(room).emit("win");
     });
 
     socket.on("disconnect", () => {

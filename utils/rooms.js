@@ -5,8 +5,8 @@ const addRoom = (room) => {
 };
 
 const addUserToRoom = (user, reqRoom) => {
-    console.log(rooms);
-    console.log(reqRoom);
+    // console.log(rooms);
+    // console.log(reqRoom);
     const index = rooms.findIndex((room) => {
         console.log(room);
         console.log(room.name);
