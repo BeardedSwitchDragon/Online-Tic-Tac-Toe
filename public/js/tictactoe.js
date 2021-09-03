@@ -105,8 +105,14 @@ const receivePlayerTwoInput = (squareID) => {
 
     
 };
-const updateGrid = () => {
-
+const checkDraw = () => {
+    const isDraw = ticTacToeSquares.every((square) => square.textContent !== "-");
+    if (isDraw) {
+        gameOver = true;
+        alert("It's a draw :P returning to home screen.");
+        location.href = "/";
+    }
+    
 };
 
 //Iterates through the all the tictactoe grids (more specfically buttons). It then listens for clicks, and replaces the button text with X (placeholder).
@@ -121,9 +127,12 @@ ticTacToeSquares.forEach((square) => {
             
             if (win) {
                 console.log("called");
-                alert("You win!");
+                alert("You win! returning to home screen.");
                 socket.emit("win", {username, room});
+                location.href = "/";
             };
+            checkDraw();
+
         };
     });
 });
@@ -143,12 +152,14 @@ socket.on("playerMove", (squareID) => {
     console.log("helllo");
     receivePlayerTwoInput(squareID);
     checkWin("O");
+    checkDraw();
     playerCanMove = true;
     
     
 });
 socket.on("win", (username) => {
     playerCanMove = false;
-    alert(`${username} Wins!!!`);
+    alert(`${username} Wins!!! returning to home screen.`);
+    location.href = "/";
 });
 
